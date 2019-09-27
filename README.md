@@ -1,2 +1,10 @@
 # Point Of Sales App Restful API NodeJs
-Node JS Restful Api CRUD Product
+Restful API for simple store application using Express.js
+
+# How to use it ?
+
+1. Install Despendencies
+
+
+
+

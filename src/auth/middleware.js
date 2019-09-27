@@ -1,6 +1,4 @@
 let jwt         = require('jsonwebtoken')
-const config    = require('./config')
-
 
 let checkToken = (req, res, next)=>{
 

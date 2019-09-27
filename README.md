@@ -32,6 +32,9 @@ Restful API for simple store application using Express.js
  - Date added
  - Date updated
 
+ # Dependencies
+ - body-parser ```bash npm i body-parser  ```
+
  # API List
 
  ## Product

@@ -33,7 +33,15 @@ Restful API for simple store application using Express.js
  - Date updated
 
  # Dependencies
- - body-parser ```bash npm i body-parser  ```
+ - body-parser              ``` npm i body-parser  ```
+ - cors                     ``` npm i cors  ```
+ - express                  ``` npm i express ```
+ - express-fileupload       ``` npm i express-fileupload ```
+ - jsonwebtoken             ``` npm i jsonwebtoken ```
+ - morgan                   ``` npm i morgan ```
+ - mv                       ``` npm i mv ```
+ - mysql                    ``` npm i mysql ```
+ - uuid                     ``` npm i uuid ```
 
  # API List
 

@@ -35,4 +35,15 @@ Restful API for simple store application using Express.js
  # API List
 
  ## Product
-
+ 
+ - **/products**                : for get all data products  
+ - **/products/add**            : for add data products  
+ - **/products/update/:id**     : for update data products  
+ - **/products/delete/:id**     : for delete data products  
+ - **/products/sort/:data**     : for sort data products  
+ - **/products/search/:name**   : for sort search products  
+ - **/products/reduce/:name**   : for sort reduce products
+ 
+ - **/users**       :
+ - **/categories**  :
+                

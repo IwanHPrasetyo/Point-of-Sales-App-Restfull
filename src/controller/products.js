@@ -3,23 +3,30 @@ const uuidv1 = require("uuid/v1");
 const mv = require("mv");
 const conn = require("../configs/db");
 const fs = require("fs");
+var redis = require("redis");
+var client = redis.createClient();
 
 module.exports = {
+  //Get All Data Product
+
   getProduct: (req, res) => {
     var { name, limit, page, sortBy, sortType } = req.query;
 
     name = typeof name !== "undefined" ? name : "";
     page = typeof page !== "undefined" ? page : 0;
-    limit = typeof limit !== "undefined" ? limit : 10;
-    sortBy = typeof sortBy !== "undefined" ? sortBy : "qty";
+    limit = typeof limit !== "undefined" ? limit : 5;
+    sortBy = typeof sortBy !== "undefined" ? sortBy : "name";
     sortType = typeof sortType !== "undefined" ? sortType : "ASC";
 
     productModel
       .getProducts(name, limit, page, sortBy, sortType)
       .then(resultQuery => {
+        //client.set("data", JSON.stringify({ data: resultQuery }));
+
         res.json({
           status: 200,
           message: "Show data success",
+          total_data: resultQuery.length,
           data: resultQuery
         });
       })
@@ -32,48 +39,14 @@ module.exports = {
       });
   },
 
-  getProductbyName: (req, res) => {
-    productModel
-      .getProductsbyName(req.params.name)
-      .then(resultQuery => {
-        res.json({
-          status: 200,
-          message: "Get data by name success",
-          data: resultQuery
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.json({
-          status: 500,
-          message: "Get data by name Fail"
-        });
-      });
-  },
-
-  getProductSort: (req, res) => {
-    productModel
-      .getProductSort(req.params.data)
-      .then(resultQuery => {
-        res.json({
-          status: 500,
-          message: "Sort data success",
-          data: resultQuery
-        });
-      })
-      .catch(err => {
-        res.json({
-          status: 500,
-          message: "Sort data fail"
-        });
-      });
-  },
+  //Add Product
 
   addProduct: (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("no file uploaded");
     }
-    let img = req.files.image;
+
+    let img = req.files.pict;
     let filetype = img.mimetype;
     var type = "";
 
@@ -108,36 +81,31 @@ module.exports = {
     var str = "";
     var id_product = uuidv1(null, str, 15);
 
-    var time = new Date();
-    var day = String(time.getDate()).padStart(2, "0");
-    var month = String(time.getMonth() + 1).padStart(2, "0");
-    var year = time.getFullYear();
-    var datenow = year + "-" + month + "-" + day;
-
+    var datenow = new Date();
     date_add = datenow;
     date_update = datenow;
 
-    const { name, id_category, description, price, qty } = req.body;
+    const { name, category, description, price, qty } = req.body;
     const data = {
       id_product,
       name,
       description,
       picture,
-      id_category,
       price,
       date_add,
       date_update,
       qty
     };
+    const category_name = category;
     const qtyp = qty;
 
     productModel
-      .addProduct(data, qtyp)
+      .addProduct(data, category_name, qtyp)
       .then(resultQuery => {
         res.json({
           status: 500,
           message: "Add data success",
-          data: resultQuery
+          data
         });
       })
       .catch(err => {
@@ -148,6 +116,8 @@ module.exports = {
         });
       });
   },
+
+  //Reduce Product
 
   reduceProduct: (req, res) => {
     const { name, qty } = req.body;
@@ -171,40 +141,21 @@ module.exports = {
       });
   },
 
+  //Update Product
+
   updateProduct: (req, res) => {
-    const { id } = req.params;
+    const id_product = req.params.id;
+    const id = id_product;
     var time = new Date();
-    var day = String(time.getDate()).padStart(2, "0");
-    var month = String(time.getMonth() + 1).padStart(2, "0");
-    var year = time.getFullYear();
-    var datenow = year + "-" + month + "-" + day;
-    date_update = datenow;
+    const date_update = time;
+    const { name, description, id_category, price, qty } = req.body;
     var data;
-    const { name, id_category, price, description, qty } = req.body;
 
     if (!req.files || Object.keys(req.files).length === 0) {
-      return res.send("no file uploaded");
-      data = { name, id_category, price, date_update, description, qty };
+      //return res.status(400).send("no file uploaded");
+      data = { id_category, name, description, date_update, price, qty };
     } else {
-
-        conn.query(
-            "SELECT * from product where id_product=?",
-            [id],
-            (errr, resu) => {
-              const [pct] = resu;
-    
-              if (!errr) {
-                fs.unlink("public/images/" + pct.picture, ero => {
-                  if (ero) throw ero;
-                  console.log("delete file success");
-                });
-              } else {
-                console.log("delete file fail");
-              }
-            }
-          );
-
-      let img = req.files.image;
+      let img = req.files.picture;
       let filetype = img.mimetype;
       var type = "";
 
@@ -226,48 +177,71 @@ module.exports = {
         type = "jpeg";
       }
 
-      var id_picture = Math.floor(Math.random() * 10) + 4;
-      let picture = "img-" + Date.now() + "-" + id_picture + "." + type;
+      var id_pct = Math.floor(Math.random() * 10) + 4;
+      let picture = "img-" + Date.now() + "-" + id_pct + "." + type;
+
+      conn.query(
+        "SELECT * from product where id_product=?",
+        [id],
+        (errr, resu) => {
+          const [pct] = resu;
+
+          if (!errr) {
+            fs.unlink("public/images/" + pct.picture, ero => {
+              if (ero) throw ero;
+              console.log("delete file success");
+            });
+          } else {
+            console.log("delete file fail");
+          }
+        }
+      );
 
       img.mv("public/images/" + picture, err => {
         if (err) {
           return res.status(500).send(err);
-          res.send("Sukses upload");
+          res.send("Sukses gagal upload");
         }
       });
 
-      ///batas
       data = {
-        name,
         id_category,
-        price,
-        picture,
-        date_update,
+        name,
         description,
+        date_update,
+        picture,
+        price,
         qty
       };
     }
-
     productModel
-      .updateProduct([data, id])
+      .updateProduct(id, data)
       .then(resultQuery => {
         res.json({
           status: 200,
-          message: "Update data success",
-          data: resultQuery
+          message: "Update Success"
         });
       })
       .catch(err => {
+        console.log(err);
         res.json({
-          status: 500,
-          status: "Error"
+          status: 200,
+          message: "Update Fail"
         });
       });
+
+    console.log(id_product);
+    console.log(data);
   },
 
+  //Delete Product
+
   deleteProduct: (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    const { id_product } = req.query;
+
     productModel
-      .deleteProduct(req.params.id)
+      .deleteProduct(id_product)
 
       .then(resultQuery => {
         res.json({

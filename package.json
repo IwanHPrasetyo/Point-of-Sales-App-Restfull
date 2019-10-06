@@ -1,7 +1,7 @@
 {
   "name": "point_of_sales_app_restfull",
   "version": "1.0.0",
-  "description": "",
+  "description": "Restful API for simple store application using Express.js",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
@@ -21,6 +22,17 @@
     "morgan": "^1.9.1",
     "mv": "^2.1.1",
     "mysql": "^2.17.1",
+    "redis": "^2.8.0",
+    "superagent": "^5.1.0",
     "uuid": "^3.3.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IwanHPrasetyo/Point-of-Sales-App-Restfull.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IwanHPrasetyo/Point-of-Sales-App-Restfull/issues"
+  },
+  "homepage": "https://github.com/IwanHPrasetyo/Point-of-Sales-App-Restfull#readme"
 }

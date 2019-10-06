@@ -1,23 +1,31 @@
-const express   = require('express')
-const Route     = express.Router()
-const cors      = require('cors')
-const middleware = require('../auth/middleware')
+const express = require("express");
+const Route = express.Router();
+const cors = require("cors");
+const middleware = require("../auth/middleware");
 
- var corsOptions = {
-         origin: 'http://localhost:5888',
-         optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-       }
+var corsOptions = {
+  origin: ["*"],
+  AllowMethods: "'OPTIONS,POST,GET,DELETE'",
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-const productController = require('../controller/products')
+const productController = require("../controller/products");
 
-Route
-        .get('/',cors(), middleware.checkToken, productController.getProduct)
-        .post('/reduce/:name', cors(corsOptions), middleware.checkToken, productController.reduceProduct)
-        .get('/search/:name', cors(), middleware.checkToken, productController.getProductbyName)
-        .get('/sort/:data', cors(), middleware.checkToken, productController.getProductSort)
-        .post('/add', cors(corsOptions), middleware.checkToken, productController.addProduct)
-        .patch('/update/:id', cors(corsOptions), middleware.checkToken, productController.updateProduct)
-        .delete('/delete/:id', cors(corsOptions), middleware.checkToken, productController.deleteProduct)
+Route.get("/", cors(), productController.getProduct)
+  .post(
+    "/reduce/",
+    cors(),
+    middleware.checkToken,
+    productController.reduceProduct
+  )
 
+  .post("/add", cors(), productController.addProduct)
+  .patch(
+    "/update/:id",
+    cors(),
+    middleware.checkToken,
+    productController.updateProduct
+  )
+  .delete("/delete", productController.deleteProduct);
 
-module.exports = Route
+module.exports = Route;

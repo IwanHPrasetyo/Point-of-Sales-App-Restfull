@@ -1,5 +1,7 @@
 const conn = require("../configs/db");
 const fs = require("fs");
+const redis = require("redis")
+const client = redis.createClient();
 
 module.exports = {
   getProducts: (name, limit, page, sortBy, sortType) => {
@@ -62,7 +64,7 @@ module.exports = {
     });
   },
 
-  addProduct: (data, qtyp) => {
+  addProduct: (data, category_name, qtyp) => {
     return new Promise((resolve, reject) => {
       conn.query(
         "SELECT * from product where name= ?",
@@ -82,17 +84,22 @@ module.exports = {
             );
           } else {
             conn.query(
-              "SELECT * from category where id_category=?",
-              data.id_category,
+              "SELECT * from category where name=?",
+              category_name,
               (err, resc) => {
                 if (resc.length > 0) {
-                  conn.query("INSERT INTO product SET ?", data, (err, resi) => {
-                    if (!err) {
-                      resolve(resi);
-                    } else {
-                      reject(err);
+                  id_category = resc[0].id_category;
+                  conn.query(
+                    "INSERT INTO product SET ?, id_category = ?",
+                    [data, id_category],
+                    (err, resi) => {
+                      if (!err) {
+                        resolve(resi);
+                      } else {
+                        reject(err);
+                      }
                     }
-                  });
+                  );
                 } else {
                   reject("CATAGORY NOT FOUND");
                 }
@@ -137,12 +144,13 @@ module.exports = {
     });
   },
 
-  updateProduct: (data) => {
+  //Update Product
+
+  updateProduct: (id, data) => {
     return new Promise((resolve, reject) => {
-    
       conn.query(
-        "UPDATE product SET ? WHERE id_product=?",
-        data,
+        "Update product SET ? Where id_product = ?",
+        [data, id],
         (err, result) => {
           if (!err) {
             resolve(data);
@@ -164,8 +172,9 @@ module.exports = {
 
           if (!errr) {
             fs.unlink("public/images/" + pct.picture, ero => {
-              if (ero) throw ero;
-              console.log("delete file success");
+              if (ero) {
+                console.log("delete file success");
+              }
             });
           } else {
             console.log("delete file fail");

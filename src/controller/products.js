@@ -3,8 +3,8 @@ const uuidv1 = require("uuid/v1");
 const mv = require("mv");
 const conn = require("../configs/db");
 const fs = require("fs");
-var redis = require("redis");
-var client = redis.createClient();
+// var redis = require("redis");
+// var client = redis.createClient();
 
 module.exports = {
   //Get All Data Product
@@ -14,29 +14,43 @@ module.exports = {
 
     name = typeof name !== "undefined" ? name : "";
     page = typeof page !== "undefined" ? page : 0;
-    limit = typeof limit !== "undefined" ? limit : 5;
+    limit = typeof limit !== "undefined" ? limit : 25;
     sortBy = typeof sortBy !== "undefined" ? sortBy : "name";
     sortType = typeof sortType !== "undefined" ? sortType : "ASC";
 
-    productModel
-      .getProducts(name, limit, page, sortBy, sortType)
-      .then(resultQuery => {
-        //client.set("data", JSON.stringify({ data: resultQuery }));
+    conn.query("Select * from product", (err, result) => {
+      if (!err) {
+        var page = result.length;
+        if (limit > page) {
+          page = 1;
+        } else if (page % limit == 0) {
+          page = page / limit;
+        } else {
+          page = (page % limit) + 1;
+        }
 
-        res.json({
-          status: 200,
-          message: "Show data success",
-          total_data: resultQuery.length,
-          data: resultQuery
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.json({
-          status: 400,
-          message: "Show data fail"
-        });
-      });
+        productModel
+          .getProducts(name, limit, page, sortBy, sortType)
+          .then(resultQuery => {
+            res.json({
+              status: 200,
+              message: "Show data success",
+              total_data: result.length,
+              page: page,
+              data: resultQuery
+            });
+          })
+          .catch(err => {
+            console.log(err);
+            res.json({
+              status: 400,
+              message: "Show data fail"
+            });
+          });
+      } else {
+        console.log("get data fail");
+      }
+    });
   },
 
   //Add Product

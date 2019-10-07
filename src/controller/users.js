@@ -36,9 +36,7 @@ module.exports = {
         (err, result) => {
           if (!err) {
             var user = result.length;
-            var mockedUsername;
-            var mockedPassword;
-
+            console.log(user);
             if (user <= 0) {
               console.log("Username and Password Incorect");
               res.json({
@@ -46,8 +44,8 @@ module.exports = {
                 message: "Incorect Email and Password"
               });
             } else {
-              mockedUsername = result[0].email;
-              mockedPassword = result[0].password;
+              var mockedUsername = result[0].email;
+              var mockedPassword = result[0].password;
               var passworddcryp = bcrypt.compareSync(pass, mockedPassword);
               console.log(passworddcryp);
 

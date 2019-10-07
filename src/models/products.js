@@ -1,6 +1,6 @@
 const conn = require("../configs/db");
 const fs = require("fs");
-const redis = require("redis")
+const redis = require("redis");
 const client = redis.createClient();
 
 module.exports = {

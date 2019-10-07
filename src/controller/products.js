@@ -20,13 +20,13 @@ module.exports = {
 
     conn.query("Select * from product", (err, result) => {
       if (!err) {
-        var page = result.length;
-        if (limit > page) {
-          page = 1;
-        } else if (page % limit == 0) {
-          page = page / limit;
+        let pages = result.length;
+        if (limit >= pages) {
+          pages = 1;
+        } else if (pages % limit == 0) {
+          pages = pages / limit;
         } else {
-          page = (page % limit) + 1;
+          pages = (pages % limit) + 1;
         }
 
         productModel
@@ -36,7 +36,7 @@ module.exports = {
               status: 200,
               message: "Show data success",
               total_data: result.length,
-              page: page,
+              page: pages,
               data: resultQuery
             });
           })

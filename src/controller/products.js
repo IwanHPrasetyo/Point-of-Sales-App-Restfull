@@ -14,7 +14,7 @@ module.exports = {
 
     name = typeof name !== "undefined" ? name : "";
     page = typeof page !== "undefined" ? page : 0;
-    limit = typeof limit !== "undefined" ? limit : 25;
+    limit = typeof limit !== "undefined" ? limit : 2;
     sortBy = typeof sortBy !== "undefined" ? sortBy : "name";
     sortType = typeof sortType !== "undefined" ? sortType : "ASC";
 
@@ -136,6 +136,7 @@ module.exports = {
   reduceProduct: (req, res) => {
     const { name, qty } = req.body;
     const data = { name, qty };
+    console.log(data);
 
     productModel
       .reduceProduct(data)

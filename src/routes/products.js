@@ -11,14 +11,14 @@ var corsOptions = {
 
 const productController = require("../controller/products");
 
-Route.get("/", cors(), productController.getProduct)
+Route
+  .get("/", cors(), productController.getProduct)
   .post(
-    "/reduce/",
+    "/reduce",
     cors(),
     middleware.checkToken,
     productController.reduceProduct
   )
-
   .post("/add", cors(), productController.addProduct)
   .patch(
     "/update/:id",

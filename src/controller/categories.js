@@ -52,7 +52,7 @@ module.exports = {
     categoryModel
       .addCategory(data)
       .then(resultQuery => {
-        client.del(categoriesRedKey, (err, replay)=> {
+        client.del(categoriesRedKey, (err, replay) => {
           console.log(replay);
         });
         res.json({

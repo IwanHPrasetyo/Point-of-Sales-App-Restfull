@@ -26,7 +26,7 @@ module.exports = {
   },
 
   login(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    //res.setHeader("Access-Control-Allow-Origin", "*");
     return new Promise((resolve, reject) => {
       var { email, pass } = req.body;
 
@@ -47,7 +47,7 @@ module.exports = {
               var mockedUsername = result[0].email;
               var mockedPassword = result[0].password;
               var passworddcryp = bcrypt.compareSync(pass, mockedPassword);
-              console.log(passworddcryp);
+              //console.log(passworddcryp);
 
               if (passworddcryp == true) {
                 let token = jwt.sign({ email }, process.env.SECRET_KEY, {
@@ -57,6 +57,7 @@ module.exports = {
                 // return the JWT token for the future API calls
                 res.json({
                   success: true,
+                  email: mockedUsername,
                   message: "Authentication successful!",
                   token: token
                 });

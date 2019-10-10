@@ -134,9 +134,9 @@ module.exports = {
   //Reduce Product
 
   reduceProduct: (req, res) => {
-    const { name, qty } = req.body;
-    const data = { name, qty };
-    console.log(data);
+    const { name, qty, price, email, total_price } = req.body;
+    const data = { name, qty, price, email, total_price };
+    //console.log(data);
 
     productModel
       .reduceProduct(data)
@@ -254,7 +254,6 @@ module.exports = {
   deleteProduct: (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     const { id_product } = req.query;
-
     productModel
       .deleteProduct(id_product)
 

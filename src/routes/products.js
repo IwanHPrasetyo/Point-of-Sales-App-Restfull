@@ -3,29 +3,28 @@ const Route = express.Router();
 const cors = require("cors");
 const middleware = require("../auth/middleware");
 
+var whitelist = ["http://localhost:3000", "http://localhost:5000"];
 var corsOptions = {
-  origin: ["*"],
-  AllowMethods: "'OPTIONS,POST,GET,DELETE'",
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: function(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
 };
 
 const productController = require("../controller/products");
 
-Route
-  .get("/", cors(), productController.getProduct)
-  .post(
-    "/reduce",
-    cors(),
-    middleware.checkToken,
-    productController.reduceProduct
-  )
-  .post("/add", cors(), productController.addProduct)
+Route.get("/", cors(corsOptions), productController.getProduct)
+  .post("/reduce", cors(), productController.reduceProduct)
+  .post("/add", cors(corsOptions), productController.addProduct)
   .patch(
     "/update/:id",
     cors(),
     middleware.checkToken,
     productController.updateProduct
   )
-  .delete("/delete", productController.deleteProduct);
+  .delete("/delete", cors(corsOptions), productController.deleteProduct);
 
 module.exports = Route;

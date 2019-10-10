@@ -23,5 +23,27 @@ module.exports = {
           message: "Show data fail"
         });
       });
+  },
+
+  getRevenueby: (req, res) => {
+    const { orderby } = req.query;
+    console.log(orderby);
+    revenueModel
+      .getRevenueby(orderby)
+      .then(resultQuery => {
+        client.setex(revenueRedKey, 3600, JSON.stringify(resultQuery));
+        res.json({
+          status: 200,
+          message: "Show data success",
+          data: resultQuery
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        res.json({
+          status: 400,
+          message: "Show data fail"
+        });
+      });
   }
 };

@@ -1,6 +1,7 @@
 const conn = require("../configs/db");
 const fs = require("fs");
 const redis = require("redis");
+const uuidv1 = require("uuid/v1");
 const client = redis.createClient();
 
 module.exports = {
@@ -112,35 +113,65 @@ module.exports = {
   },
 
   reduceProduct: data => {
-    return new Promise((resolve, reject) => {
-      conn.query(
-        "SELECT * from product where name= ?",
-        data.name,
-        (err, resu) => {
-          //var qty = data.qty + result[0].qty
-          const min = resu[0].qty - data.qty;
+    let nameorder = data.name;
+    //console.log("jumlah nama" + nameorder);
+    let time = new Date();
+    if (nameorder.length > 1) {
+      nameorder = nameorder.join();
+    }
 
-          if (min > 0) {
-            if (resu.length > 0) {
-              conn.query(
-                "UPDATE product SET qty = ? where name = ?",
-                [min, data.name],
-                (err, res) => {
-                  if (!err) {
-                    resolve(data);
-                  } else {
-                    reject(new Error(err));
+    return new Promise((resolve, reject) => {
+      let dataorder = data.name.length;
+      var str = "";
+      var invoice = uuidv1(null, str, 15);
+      for (let d = 0; d < dataorder; d++) {
+        conn.query(
+          "SELECT * from product where name= ?",
+          data.name[d],
+          (err, resu) => {
+            const min = resu[0].qty - data.qty[0];
+
+            if (min > 0) {
+              if (resu.length > 0) {
+                conn.query(
+                  "UPDATE product SET qty = ? where name = ?",
+                  [min, data.name[d]],
+                  (err, res) => {
+                    if (!err) {
+                      conn.query(
+                        "INSERT INTO revenue SET invoices = '" +
+                          invoice +
+                          "', user='" +
+                          data.email +
+                          "',dataorder='" +
+                          nameorder +
+                          "', amount='" +
+                          data.total_price +
+                          "'",
+                        (err, res) => {
+                          if (!err) {
+                            resolve(data);
+                          } else {
+                            reject(new Error(err));
+                          }
+                        }
+                      );
+
+                      resolve(data);
+                    } else {
+                      reject(new Error(err));
+                    }
                   }
-                }
-              );
+                );
+              } else {
+                reject(new Error(err));
+              }
             } else {
-              reject(new Error(err));
+              console.log("Jumlah data tidak cukup");
             }
-          } else {
-            reject(new Error(err));
           }
-        }
-      );
+        );
+      }
     });
   },
 

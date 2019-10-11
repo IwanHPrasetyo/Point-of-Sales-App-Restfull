@@ -27,5 +27,34 @@ module.exports = {
         }
       );
     });
+  },
+
+  getOrder: by => {
+    return new Promise((resolve, reject) => {
+      let orderby = by;
+      let to = 0;
+      if (orderby == "day") {
+        to = 10;
+      } else if (orderby == "month") {
+        to = 7;
+      } else if (orderby == "year") {
+        to = 4;
+      }
+
+      conn.query(
+        "SELECT *, SUBSTR(DATE,1, " +
+          to +
+          ") AS dateday, SUBSTR(CURDATE(),1, " +
+          to +
+          ") AS datenow FROM revenue  HAVING dateday = datenow",
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(err));
+          }
+        }
+      );
+    });
   }
 };

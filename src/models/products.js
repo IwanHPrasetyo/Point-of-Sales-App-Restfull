@@ -114,10 +114,12 @@ module.exports = {
 
   reduceProduct: data => {
     let nameorder = data.name;
-    //console.log("jumlah nama" + nameorder);
+    console.log("jumlah nama" + nameorder);
     let time = new Date();
     if (nameorder.length > 1) {
       nameorder = nameorder.join();
+    } else {
+      nameorder = nameorder;
     }
 
     return new Promise((resolve, reject) => {

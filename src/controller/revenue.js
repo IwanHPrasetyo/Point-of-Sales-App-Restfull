@@ -45,5 +45,27 @@ module.exports = {
           message: "Show data fail"
         });
       });
+  },
+
+  getOrder: (req, res) => {
+    const { by } = req.query;
+    // console.log(by);
+    revenueModel
+      .getOrder(by)
+      .then(resultQuery => {
+        client.setex(revenueRedKey, 3600, JSON.stringify(resultQuery));
+        res.json({
+          status: 200,
+          message: "Show data success",
+          data: resultQuery
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        res.json({
+          status: 400,
+          message: "Show data fail"
+        });
+      });
   }
 };

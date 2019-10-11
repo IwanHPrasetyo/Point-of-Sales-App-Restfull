@@ -32,7 +32,7 @@ module.exports = {
   getOrder: by => {
     return new Promise((resolve, reject) => {
       let orderby = by;
-      let to = 0;
+      let to = 10;
       if (orderby == "day") {
         to = 10;
       } else if (orderby == "month") {
@@ -50,6 +50,21 @@ module.exports = {
         (err, result) => {
           if (!err) {
             resolve(result);
+          } else {
+            reject(new Error(err));
+          }
+        }
+      );
+    });
+  },
+
+  getIncome: () => {
+    return new Promise((resolve, reject) => {
+      conn.query(
+        "SELECT  (SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 1 DAY)) AS daylast,(SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 0 DAY)) AS daynow,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())) AS yearnow ,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())-1) AS yearlast,(SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())-1) AS lastweek, (SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())) AS weeknow ",
+        (err, resultnow) => {
+          if (!err) {
+            resolve(resultnow);
           } else {
             reject(new Error(err));
           }

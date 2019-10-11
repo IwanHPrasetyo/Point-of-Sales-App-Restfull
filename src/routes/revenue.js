@@ -7,6 +7,7 @@ const revenueController = require("../controller/revenue");
 
 Route.get("/", cors(), revenueController.getRevenue)
   .get("/by/", cors(), revenueController.getRevenueby)
-  .get("/order/", cors(), revenueController.getOrder);
+  .get("/order/", cors(), revenueController.getOrder)
+  .get("/income/", cors(), revenueController.getIncome);
 
 module.exports = Route;

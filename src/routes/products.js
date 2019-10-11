@@ -16,7 +16,7 @@ var corsOptions = {
 
 const productController = require("../controller/products");
 
-Route.get("/", cors(corsOptions), productController.getProduct)
+Route.get("/", cors(), productController.getProduct)
   .post("/reduce", cors(), productController.reduceProduct)
   .post("/add", cors(corsOptions), productController.addProduct)
   .patch(

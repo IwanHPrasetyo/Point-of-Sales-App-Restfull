@@ -5,10 +5,9 @@ const middleware = require("../auth/middleware");
 
 const revenueController = require("../controller/revenue");
 
-Route.get("/", cors(), revenueController.getRevenue).get(
-  "/by/",
-  cors(),
-  revenueController.getRevenueby
+Route
+.get("/", cors(), revenueController.getRevenue)
+.get("/by/",cors(),revenueController.getRevenueby
 );
 
 module.exports = Route;

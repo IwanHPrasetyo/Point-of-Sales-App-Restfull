@@ -14,7 +14,7 @@ module.exports = {
 
     name = typeof name !== "undefined" ? name : "";
     page = typeof page !== "undefined" ? page : 0;
-    limit = typeof limit !== "undefined" ? limit : 2;
+    limit = typeof limit !== "undefined" ? limit : 4;
     sortBy = typeof sortBy !== "undefined" ? sortBy : "name";
     sortType = typeof sortType !== "undefined" ? sortType : "ASC";
 

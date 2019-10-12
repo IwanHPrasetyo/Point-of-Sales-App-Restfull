@@ -3,6 +3,8 @@ const uuidv1 = require("uuid/v1");
 const mv = require("mv");
 const conn = require("../configs/db");
 const fs = require("fs");
+// var redis = require("redis");
+// var client = redis.createClient();
 
 module.exports = {
   //Get All Data Product

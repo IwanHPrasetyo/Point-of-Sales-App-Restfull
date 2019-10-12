@@ -1,26 +1,12 @@
 const categoryModel = require("../models/categories");
 const uuidv1 = require("uuid/v1");
-// const redis = require("redis");
-// const client = redis.createClient();
-const categoriesRedKey = "user : category";
 
 module.exports = {
   //Get All Ctegories
   getCategory: (req, res) => {
-    // return client.get(categoriesRedKey, (err, categories) => {
-    //   if (categories) {
-    //     const result = JSON.parse(categories);
-    //     return res.json({
-    //       from: "cache",
-    //       status: 200,
-    //       data: result,
-    //       message: "Show data success"
-    //     });
-    //   } else {
     categoryModel
       .getCategory()
       .then(resultQuery => {
-        // client.setex(categoriesRedKey, 3600, JSON.stringify(resultQuery));
         res.json({
           status: 200,
           message: "Show data success",
@@ -34,8 +20,6 @@ module.exports = {
           message: "Show data fail"
         });
       });
-    //   }
-    // });
   },
 
   //Add data categories
@@ -52,9 +36,6 @@ module.exports = {
     categoryModel
       .addCategory(data)
       .then(resultQuery => {
-        // client.del(categoriesRedKey, (err, replay) => {
-        //   console.log(replay);
-        // });
         res.json({
           status: 500,
           message: "Add category success",
@@ -80,12 +61,10 @@ module.exports = {
     categoryModel
       .updateCategory(data)
       .then(resultQuery => {
-        // client.del(categoriesRedKey, function(err, replay) {
-        //   console.log(replay);
-        // });
         res.json({
           status: 200,
-          message: "Update category success"
+          message: "Update category success",
+          data: resultQuery
         });
       })
       .catch(err => {
@@ -102,9 +81,6 @@ module.exports = {
     categoryModel
       .deleteCategory(id_category)
       .then(resultQuery => {
-        // client.del(categoriesRedKey, function(err, replay) {
-        //   console.log(replay);
-        // });
         res.json({
           status: 200,
           message: "Delete success",

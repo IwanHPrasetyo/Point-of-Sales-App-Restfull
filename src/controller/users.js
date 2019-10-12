@@ -2,7 +2,7 @@ const userModel = require("../models/users");
 const jwt = require("jsonwebtoken");
 const conn = require("../configs/db");
 const uuidv1 = require("uuid/v1");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 module.exports = {

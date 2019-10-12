@@ -17,7 +17,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       conn.query(
         "SELECT *,SUM(amount) AS income, EXTRACT(YEAR FROM DATE) AS year , DAYNAME(DATE) AS dayname, MONTHNAME(DATE) AS monthname, EXTRACT(DAY FROM DATE) AS day ,EXTRACT(MONTH FROM DATE) AS month, EXTRACT(WEEK from DATE) AS week FROM revenue GROUP BY " +
-          orderby,
+          orderby +
+          "desc",
         (err, result) => {
           if (!err) {
             resolve(result);

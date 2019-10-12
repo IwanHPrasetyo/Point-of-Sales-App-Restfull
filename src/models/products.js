@@ -1,8 +1,6 @@
 const conn = require("../configs/db");
 const fs = require("fs");
-const redis = require("redis");
 const uuidv1 = require("uuid/v1");
-const client = redis.createClient();
 
 module.exports = {
   getProducts: (name, limit, page, sortBy, sortType) => {

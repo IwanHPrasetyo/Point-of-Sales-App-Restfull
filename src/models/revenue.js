@@ -17,8 +17,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       conn.query(
         "SELECT *,SUM(amount) AS income, EXTRACT(YEAR FROM DATE) AS year , DAYNAME(DATE) AS dayname, MONTHNAME(DATE) AS monthname, EXTRACT(DAY FROM DATE) AS day ,EXTRACT(MONTH FROM DATE) AS month, EXTRACT(WEEK from DATE) AS week FROM revenue GROUP BY " +
-          orderby +
-          "desc",
+          orderby,
         (err, result) => {
           if (!err) {
             resolve(result);
@@ -62,7 +61,7 @@ module.exports = {
   getIncome: () => {
     return new Promise((resolve, reject) => {
       conn.query(
-        "SELECT  (SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 1 DAY)) AS daylast,(SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 0 DAY)) AS daynow,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())) AS yearnow ,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())-1) AS yearlast,(SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())-1) AS lastweek, (SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())) AS weeknow ",
+        "SELECT  (SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 1 DAY)) AS daylast,(SELECT sum(amount) FROM revenue WHERE DATE(date) = DATE(NOW() - INTERVAL 0 DAY)) AS daynow,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())) AS yearnow ,(SELECT sum(amount) FROM revenue WHERE YEAR(date) = YEAR(CURDATE())-1) AS yearlast,(SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())-1) AS lastweek, (SELECT COUNT(*) FROM revenue WHERE WEEK(date) = WEEK(CURDATE())) AS weeknow",
         (err, resultnow) => {
           if (!err) {
             resolve(resultnow);

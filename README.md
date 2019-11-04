@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="600" height="400" src="https://www.restapiexample.com/wp-content/uploads/2017/09/nodejs-mysql-express.png">
+  <img width="600" height="350" src="https://www.restapiexample.com/wp-content/uploads/2017/09/nodejs-mysql-express.png">
 </p>
 
 # Point Of Sales App Restful API NodeJs

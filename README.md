@@ -1,5 +1,6 @@
-<a href="https://www.restapiexample.com/wp-content/uploads/2017/09/nodejs-mysql-express.png)</a>
-
+<p align="center">
+  <img width="200" height="200" src="https://www.restapiexample.com/wp-content/uploads/2017/09/nodejs-mysql-express.png">
+</p>
 
 # Point Of Sales App Restful API NodeJs
 Restful API for simple store application using Express.js

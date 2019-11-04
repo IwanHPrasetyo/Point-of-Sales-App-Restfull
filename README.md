@@ -1,4 +1,4 @@
-               ![image](https://user-images.githubusercontent.com/55027286/68119603-ad753500-ff35-11e9-9da0-cac7de2e36a0.png)
+![image](https://user-images.githubusercontent.com/55027286/68119603-ad753500-ff35-11e9-9da0-cac7de2e36a0.png)
 
 
 # Point Of Sales App Restful API NodeJs

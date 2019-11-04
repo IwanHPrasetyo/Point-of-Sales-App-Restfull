@@ -11,7 +11,6 @@ require("dotenv/config");
 app.use(exppress.static("./"));
 
 const fileUpload = require("express-fileupload");
-
 const routerNav = require("./src/index");
 
 app.use(bodyParser.json());

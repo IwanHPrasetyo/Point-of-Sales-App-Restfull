@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(fileUpload());
 
-const port = process.env.SERVER_PORT || 5888;
+const port = process.env.PORT || 5000;
 
 
 app.listen(port, () => {
